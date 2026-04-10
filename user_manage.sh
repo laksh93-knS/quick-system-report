@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Linux User Management Script 
+# Linux User Management Script
 
 while true
 do
@@ -18,14 +18,26 @@ do
     if [ "$choice" = "1" ]; then
         echo "Enter username to create:"
         read username
-        sudo useradd $username
-        echo "User created successfully"
+
+        id "$username" > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            echo "User already exists"
+        else
+            sudo useradd "$username"
+            echo "User created successfully"
+        fi
 
     elif [ "$choice" = "2" ]; then
         echo "Enter username to delete:"
         read username
-        sudo userdel $username
-        echo "User deleted successfully"
+
+        id "$username" > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "User does not exist"
+        else
+            sudo userdel "$username"
+            echo "User deleted successfully"
+        fi
 
     elif [ "$choice" = "3" ]; then
         echo "List of users:"
