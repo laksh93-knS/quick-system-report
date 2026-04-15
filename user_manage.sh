@@ -1,54 +1,46 @@
 #!/bin/bash
 
-# Linux User Management Script
+echo "========== Quick System Report =========="
 
-while true
-do
-    echo ""
-    echo "===== User Management Menu ====="
-    echo "1. Create User"
-    echo "2. Delete User"
-    echo "3. List Users"
-    echo "4. Exit"
-    echo "==============================="
+echo ""
+echo "Date and Time:"
+date
 
-    echo "Enter your choice:"
-    read choice
+echo ""
+echo "Current User:"
+whoami
 
-    if [ "$choice" = "1" ]; then
-        echo "Enter username to create:"
-        read username
+echo ""
+echo "Disk Usage:"
+df -h / | tail -1
 
-        id "$username" > /dev/null 2>&1
-        if [ $? -eq 0 ]; then
-            echo "User already exists"
-        else
-            sudo useradd "$username"
-            echo "User created successfully"
-        fi
+echo ""
+echo "Memory Usage:"
+free -h | grep Mem
 
-    elif [ "$choice" = "2" ]; then
-        echo "Enter username to delete:"
-        read username
+echo ""
+echo "Running Processes:"
+ps -e | wc -l
 
-        id "$username" > /dev/null 2>&1
-        if [ $? -ne 0 ]; then
-            echo "User does not exist"
-        else
-            sudo userdel "$username"
-            echo "User deleted successfully"
-        fi
+echo ""
+echo "IP Address:"
+hostname -I
 
-    elif [ "$choice" = "3" ]; then
-        echo "List of users:"
-        cut -d: -f1 /etc/passwd
+echo ""
+echo "Active Users:"
+who | wc -l
 
-    elif [ "$choice" = "4" ]; then
-        echo "Exiting..."
-        break
+echo ""
+echo "Last Login:"
+last -n 1
 
-    else
-        echo "Invalid choice, try again"
-    fi
+echo ""
+echo "SSH Sessions:"
+who | grep pts
 
-done
+echo ""
+echo "NFS Mounts:"
+mount | grep nfs
+
+echo ""
+echo "========================================="
